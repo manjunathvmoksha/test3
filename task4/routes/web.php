@@ -77,6 +77,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function(){
         Route::put('updatequestion', 'HomeController@updatequestion')->name('updatequestion');
 
         Route::get('delete/{sub}/{id}', 'HomeController@deletequestion')->name('deletequestion');
+        Route::get('attend_sub/{uid}', 'HomeController@attended_sub')->name('attend_sub');
+        Route::get('attend_question/{sub}/{uid}', 'HomeController@attended_question')->name('attend_question');
+
 
         Route::post('logout', 'Auth\AuthenticatedSessionController@destroy')->name('logout');
     });

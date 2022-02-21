@@ -18,6 +18,8 @@ class Attended extends Migration
             $table->id();
             $table->string('user_id');
             $table->string('question_id');
+            $table->string('q_subject');
+            $table->string('file_name');
             $table->string('video_path');
             $table->timestamps();
         });

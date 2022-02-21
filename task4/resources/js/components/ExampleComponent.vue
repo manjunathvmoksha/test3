@@ -31,7 +31,6 @@ export default {
     props: ['uploadUrl'],
     data() {
         return {
-            question_id : qid,
             player: '',
             retake: 0,
             isSaveDisabled: true,
@@ -107,12 +106,15 @@ export default {
             var data = this.player.recordedData;
             var formData = new FormData();
             formData.append('video', data, data.name);
-            formData.append('question_id', qid);
             formData.append('question_subject', q_sub);
+            formData.append('question_id', qid);
+            // console.log(q_sub);
+            // console.log(qid);
             this.submitText = "Uploading "+data.name;
             console.log('uploading recording:', data.name);
             this.player.record().stopDevice();
-            console.log(qid);
+            // console.log(qid);
+            // alert(q_sub);
             // console.log(uploadUrl);
             fetch('http://127.0.0.1:8000/video', {
                 method: 'POST',
@@ -120,9 +122,6 @@ export default {
                 headers: {
                   // 'question_id' : qid,
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data:{
-                  question_id : qid,
                 }
             }).then(
                 success => {

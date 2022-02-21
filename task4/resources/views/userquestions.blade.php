@@ -34,17 +34,14 @@
                                 <td class="p-6 label-font">{{$i->question}}</td>
                                 <!-- <td class="p-6">{{$i->time}}</td> -->
                                 <form>
-                                    <input type="hidden" value="{{$i->subject}}" id="q_sub" name="q_sub"/>
+                                    <input type="text" value="{{$i->subject}}" id="q_subject" name="q_subject"/>
                                     <input type="hidden" value="{{$i->id}}" id="q_id" name="q_id"/>
                                     <input type="hidden" value="{{$i->time}}" id="timer" name="timer"/>
                                 </form>
                                 <script>
                                     let timer_x = document.getElementById('timer').value;
                                     let qid = document.getElementById('q_id').value;
-                                    let q_sub = document.getElementById('q_sub').value;
-                                    // console.log(qid);
-                                    // let new_qid = document.getElementById('question_id');
-                                    // new_qid.value = qid;
+                                    let q_sub = document.getElementById('q_subject').value;
                                 </script>
                                     
                             </tr>

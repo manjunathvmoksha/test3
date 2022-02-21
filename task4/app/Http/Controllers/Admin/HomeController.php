@@ -10,6 +10,8 @@ use App\Models\React;
 use App\Models\Node;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use App\Models\Attended;
+
 
 class HomeController extends Controller
 {
@@ -44,7 +46,10 @@ class HomeController extends Controller
     public function list()
     {
         $data = User::all();
-        return view('admin.userlist',['data'=>$data]);
+        $users_id = Attended::select('user_id')->distinct()->get();
+        $user_id = $users_id;
+        // dd($user_id);
+        return view('admin.userlist',['data'=>$data, 'user_id'=>$user_id]);
     }
 
     public function adduser(Request $req )
@@ -158,6 +163,33 @@ class HomeController extends Controller
             return redirect('admin/questionlist/'.$sub);
         }
         // dd($question);
+    }
+
+    public function attended_sub($u_id){
+        return view('admin.attend_sub',['u_id'=>$u_id]);
+    }
+
+    public function attended_question($sub, $u_id){
+        // dd($sub);
+        $uid = $u_id;
+        if($sub == 'ReactJs')
+        {
+            // dd($uid);
+            $data = React::join('attendeds', 'question_id', '=', 'reacts.id')->where('q_subject', $sub)
+            ->get(['file_name', 'question']);
+
+            // $question
+            return view('admin.attend_question',['data'=>$data]);
+        }elseif($sub == 'NodeJs')
+        {
+            $data = Node::join('attendeds', 'question_id', '=', 'nodes.id')->where('q_subject', $sub)
+            ->get(['file_name', 'question']);
+            // $question_id = Attended::select('user_id')->distinct()->get();
+    
+            return view('admin.attend_question',['data'=>$data]);
+        }
+       
+
     }
 
 }

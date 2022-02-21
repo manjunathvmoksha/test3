@@ -41,6 +41,7 @@ class VideoRecordingController extends Controller
             'user_id' => $user_id, 
             'question_id'=> $q_id,
             'q_subject'=>$q_sub,
+            'file_name'=>$filename,
             'video_path' => $file_path, 
         ]);
 
