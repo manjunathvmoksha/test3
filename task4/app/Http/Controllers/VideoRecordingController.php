@@ -22,7 +22,7 @@ class VideoRecordingController extends Controller
         // dd($request);
         $file = tap($request->file('video'))->store('videos');
         $filename = pathinfo($file->hashName(), PATHINFO_FILENAME);
-        $q_id = $request->question_id;
+        // $q_id = $request->question_id;
         $q_sub = $request->question_subject;
         
         // dd($q_id);
@@ -37,9 +37,9 @@ class VideoRecordingController extends Controller
         $user_id = auth()->id();
         $file_path = 'converted_videos/'.$filename.'.mp4';
                 
-        \DB::table('Attendeds')->insert([
+        \DB::table('attendeds')->insert([
             'user_id' => $user_id, 
-            'question_id'=> $q_id,
+            'question_id' => NULL,
             'q_subject'=>$q_sub,
             'file_name'=>$filename,
             'video_path' => $file_path, 

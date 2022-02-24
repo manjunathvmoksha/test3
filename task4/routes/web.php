@@ -36,9 +36,12 @@ Route::middleware('auth')->group(function(){
     Route::get('course', 'UserController@courses')->name('course');
     Route::get('userquestions', 'Controller@subjects')->name('userquestions');
     Route::get('userquestions/{sub}/{id}', 'UserController@sub')->name('userquestions');
+    Route::get('userquestion/{sub}/{id}', 'UserController@subj')->name('userquestions');
+    Route::post('userquestion', 'UserController@new_sub')->name('userquestions');
     Route::get('userquestions/{sub}', 'UserController@single_sub')->name('userquestions');
     Route::get('complete', 'UserController@complete')->name('complete');
     Route::get('enroll/{id}', 'UserController@enroll', 'enroll');
+    Route::post('logout', 'Auth\AuthenticatedSessionController@destroy')->name('logout');
     // Route::get('userquestions/{sub}/{id}', 'UserController@sub')->name('userquestions');
 
 });

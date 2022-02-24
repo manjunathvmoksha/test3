@@ -11,6 +11,9 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 // use DataTables;
+use Response;
+
+
 
 class UserController extends Controller
 {
@@ -27,12 +30,13 @@ class UserController extends Controller
                 return redirect('complete');
             }else{
                 $data = React::where('id', $id)->get();
+                $data_count = React::sum('time');
                 // dd($data);
                 if( $data->count())
                 {
                     $next_id = (int)$id+1;
                     // dd($next_id);
-                    return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub]);   
+                    return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub, 'sum'=>$data_count]);   
                 }else
                 {
                     $id = (int)$id+1; 
@@ -54,12 +58,13 @@ class UserController extends Controller
                 return redirect('complete');
             }else{
                 $data = Node::where('id', $id)->get();
+                $data_count = Node::sum('time');
                 // dd($data);
                 if( $data->count())
                 {
                     $next_id = (int)$id+1;
                     // dd($next_id);
-                    return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub]);   
+                    return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub, 'sum'=>$data_count]);   
                 }else
                 {
                     $id = (int)$id+1; 
@@ -70,6 +75,79 @@ class UserController extends Controller
             }
         }
         
+        // return view('userquestions',['data'=>$data], ['sub'=>$sub]);   
+    }
+
+    public function subj($sub, $id)
+    {
+        if($sub == 'ReactJs')
+        {
+            $last2 = React::orderBy('id', 'DESC')->first();
+            $last_id = $last2->id;
+            if($id > $last_id)
+            {
+                return Response::json($data);
+                // return redirect('complete');
+            }else{
+                $data = React::where('id', $id)->get();
+                // dd($data);
+                if( $data->count())
+                {
+                    $next_id = (int)$id+1;
+                    // dd($next_id);
+                    return Response::json($data);
+                    // return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub]);   
+                }else
+                {
+                    $id = (int)$id+1; 
+                    // dd($sub);
+                    return Response::json($data);
+                    // return redirect('userquestions/'.$sub.'/'.$id);
+                }
+    
+            }
+
+        }elseif($sub == 'NodeJs')
+        {
+            // $main = Node::all();
+            // $data = Node::where('id', $id)->get();
+            // dd($data);
+            $last2 = Node::orderBy('id', 'DESC')->first();
+            $last_id = $last2->id;
+            if($id > $last_id)
+            {
+                return Response::json($data);
+                // return redirect('complete');
+            }else{
+                $data = Node::where('id', $id)->get();
+                // dd($data);
+                if( $data->count())
+                {
+                    $next_id = (int)$id+1;
+                    // dd($next_id);
+                    return Response::json($data);
+                    // return view('userquestions',['data'=>$data], ['next_id'=>$next_id, 'sub'=>$sub]);   
+                }else
+                {
+                    $id = (int)$id+1; 
+                    // dd($sub);
+                    return Response::json($data);
+                    // return redirect('userquestions/'.$sub.'/'.$id);
+                }
+    
+            }
+        }
+        
+        // return view('userquestions',['data'=>$data], ['sub'=>$sub]);   
+    }
+
+    public function new_sub(request $req)
+    {
+        // $sub = $req->question_subject;
+        // $id = $req->question_id;
+        return response()->json([
+            'status'=> 'success'
+        ]);
         // return view('userquestions',['data'=>$data], ['sub'=>$sub]);   
     }
 

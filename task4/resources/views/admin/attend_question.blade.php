@@ -31,30 +31,18 @@
                         <table class="table">
                             <tr>
                                 <td class="p-6">Subject</td>
-                                <td class="p-6">Path</td>
                                 <td class="p-6">videos </td>
                             </tr>
                             @foreach($data as $i)
                             <tr>
-                                <td class="p-6">{{$i->question}}</td>
+                                <td class="p-6">{{$i->question}}</td>                                                          
                                 <td class="p-6">
-                                    @php $video_name = $i->file_name 
-                                    // {{Storage::url("app/converted_videos/".$video_name.".mp4")}}
-                                    @endphp
-                                    {{Storage::url("app/public/".$video_name.".mp4")}}
-                                </td>                           
-                                <td class="p-6">
-                                    
-
                                     <video width="320" height="240" controls autoplay>
                                         @php $video_name = $i->file_name 
                                         @endphp
-                                        {{-- <source src="{{URL::asset("storage/app/converted_videos/kEDs0lGHIrVApLVSrY5T5ikE0qMkqz1LM6ZQ1vsW.mp4")}}" type="video/mp4"> --}}
-                                        <source src="{{Storage::url("app/public/".$video_name.".mp4")}}" type="video/mp4">
-                                        {{-- <source src="{{Storage::url("app/public/".$video_name.".ogg")}}" type="video/ogg"> --}}
+                                        <source src="{{asset("storage/".$video_name.".mp4")}}" type="video/mp4">
                                         Your browser does not support the video tag.
                                     </video>
-                                    
                                 </td>     
                             </tr>
                             @endforeach

@@ -13,7 +13,7 @@
         <!-- <input type="text" value="123" id="question_id" name="question_id"/> -->
         <button type="button" class="btn btn-info" @click.prevent="startRecording()" v-bind:disabled="isStartRecording" id="btnStart">Start Recording</button>
         <button type="button" class="btn btn-success" @click.prevent="submitVideo()" v-bind:disabled="isSaveDisabled" id="btnSave">{{ submitText }}</button>
-        <button type="button" class="btn btn-primary" @click.prevent="retakeVideo()" v-bind:disabled="isRetakeDisabled" id="btnRetake">Retake</button>
+        <!-- <button type="button" class="btn btn-primary" @click.prevent="retakeVideo()" v-bind:disabled="isRetakeDisabled" id="btnRetake">Retake</button> -->
     </div>
 </template>
 
@@ -33,9 +33,9 @@ export default {
         return {
             player: '',
             retake: 0,
-            isSaveDisabled: true,
+            isSaveDisabled: false,
             isStartRecording: false,
-            isRetakeDisabled: true,
+            // isRetakeDisabled: true,
             submitText: 'Submit',
             options: {
                 controls: true,
@@ -53,7 +53,7 @@ export default {
                         pip: false,
                         audio: true,
                         video: true,
-                        maxLength: timer_x,
+                        maxLength: total_time,
                         debug: true
                     }
                 }
@@ -66,29 +66,30 @@ export default {
             var msg = 'Using video.js ' + videojs.VERSION +
                 ' with videojs-record ' + videojs.getPluginVersion('record') +
                 ' and recordrtc ' + RecordRTC.version;
-            videojs.log(msg);
+            // videojs.log(msg);
         });
         // error handling
         this.player.on('deviceReady', () => {
             this.player.record().start();
-            console.log('device ready:');
+            // console.log('device ready:');
         });
         this.player.on('deviceError', () => {
-            console.log('device error:', this.player.deviceErrorCode);
+            // console.log('device error:', this.player.deviceErrorCode);
         });
         this.player.on('error', (element, error) => {
             console.error(error);
         });
         // user clicked the record button and started recording
         this.player.on('startRecord', () => {
+            // this.isSaveDisabled = false;
             console.log('started recording!');
         });
         // user completed recording and stream is available
         this.player.on('finishRecord', () => {
             this.isSaveDisabled = false;
-            if(this.retake == 0) {
-                this.isRetakeDisabled = false;
-            }
+            // if(this.retake == 0) {
+            //     this.isRetakeDisabled = false;
+            // }
             // the blob object contains the recorded data that
             // can be downloaded by the user, stored on server etc.
             console.log('finished recording: ', this.player.recordedData);
@@ -98,16 +99,17 @@ export default {
         startRecording() {
             this.isStartRecording = true;
             this.player.record().getDevice();
+            // this.isSaveDisabled = false;
         },
         submitVideo() {
             console.log('submit button clicked');
-            this.isSaveDisabled = true;
-            this.isRetakeDisabled = true;
+            // this.isSaveDisabled = true;
+            // this.isRetakeDisabled = true;
             var data = this.player.recordedData;
             var formData = new FormData();
             formData.append('video', data, data.name);
             formData.append('question_subject', q_sub);
-            formData.append('question_id', qid);
+            // formData.append('question_id', qid);
             // console.log(q_sub);
             // console.log(qid);
             this.submitText = "Uploading "+data.name;
@@ -116,7 +118,7 @@ export default {
             // console.log(qid);
             // alert(q_sub);
             // console.log(uploadUrl);
-            fetch('http://127.0.0.1:8000/video', {
+            fetch('http://127.0.0.1:8000/video/', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -127,6 +129,7 @@ export default {
                 success => {
                     console.log('recorded video upload complete.');
                     this.submitText = "Upload Complete";
+                    this.isSaveDisabled = true;
                 }
             ).catch(
                 error =>{
@@ -134,17 +137,17 @@ export default {
                     this.submitText = "Upload Failed";
                 }
             );
-            document.getElementById('v_name').value = '';
-            var click_btn = document.getElementById('next_btn');
-            click_btn.click();
+            // document.getElementById('v_name').value = '';
+            // var click_btn = document.getElementById('next_btn');
+            // click_btn.click();
 
-        },
-        retakeVideo() {
-            this.isSaveDisabled = true;
-            this.isRetakeDisabled = true;
-            this.retake += 1;
-            this.player.record().start();
         }
+        // retakeVideo() {
+        //     this.isSaveDisabled = true;
+        //     this.isRetakeDisabled = true;
+        //     this.retake += 1;
+        //     this.player.record().start();
+        // }
     },
     beforeDestroy() {
         if (this.player) {
